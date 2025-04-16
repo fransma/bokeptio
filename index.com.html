@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uji Pemutaran Video</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background-color: #f0f0f0; }
+        .video-container { text-align: center; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        video { max-width: 100%; height: auto; border-radius: 4px; }
+        #error-message { color: red; }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <h1>Uji Pemutaran Video</h1>
+        <video id="myVideo" controls width="640" height="360">
+            <source id="mp4Source" src="bokepthio.mp4" type="video/mp4">
+            Browser Anda tidak mendukung elemen video.
+        </video>
+        <p>Video ini diputar dengan kontrol pengguna.</p>
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        const video = document.getElementById('myVideo');
+        const mp4Source = document.getElementById('mp4Source');
+        const errorMessage = document.getElementById('error-message');
+
+        video.addEventListener('error', () => {
+            errorMessage.textContent = 'Terjadi kesalahan saat memuat video. Periksa jalur dan format video.';
+            console.error('Kesalahan video:', video.error); // Log detail kesalahan di konsol
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+            console.log('Metadata video berhasil dimuat.');
+        });
+
+        video.addEventListener('canplay', () => {
+            console.log('Video siap diputar.');
+        });
+
+        // Periksa apakah sumber MP4 ada
+        fetch(mp4Source.src, { method: 'HEAD' })
+            .then(response => {
+                if (!response.ok) {
+                    errorMessage.textContent = 'File MP4 tidak ditemukan (404). Periksa jalur.';
+                    console.error('File MP4 tidak ditemukan:', mp4Source.src);
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = 'Kesalahan saat memeriksa file MP4. Periksa jalur.';
+                console.error('Kesalahan memeriksa file MP4:', error);
+            });
+
+    </script>
+</body>
+</html>
